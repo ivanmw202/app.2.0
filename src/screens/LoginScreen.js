@@ -18,7 +18,7 @@ import { useState } from "react";
 import { URL_BASE } from "../config/URL_BASE";
 
 export default function LoginScreen({ navigation }) {
-  const [staff,setStaff]=useState(false);
+  const [staff, setStaff] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(true);
@@ -47,11 +47,11 @@ export default function LoginScreen({ navigation }) {
 
     const respuesta = await response.json();
     console.log(respuesta);
-    if (respuesta.email === email && respuesta.token ) {
+    if (respuesta.email === email && respuesta.token) {
       await SecureStore.setItemAsync("token", respuesta.token);
       await SecureStore.setItemAsync("email", respuesta.email);
-      await SecureStore.setItemAsync('is_staff',response.is_staff)
-      navigation.navigate('Inside');
+      respuesta.is_staff === true && setStaff(true)
+      navigation.navigate("Inside", { staff: staff });
     } else {
       alert(respuesta.email);
     }
@@ -62,94 +62,89 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <>
-      
-        <View style={styles.screen}>
-          
-          <View style={styles.container}>
-            
-            <View style={styles.containerImg}>
-              <Image
-                style={styles.img}
-                source={require("../../assets/ITSZ/LOGO.png")}
-              ></Image>
-            </View>
 
-            <Text style={styles.titulo}>BIENVENIDO.</Text>
-            <Text styles={styles.subTitle}>
-              Al repositorio del Instituto tecnologico Superior de Zongolica.
-            </Text>
+      <View style={styles.screen}>
 
-            <SafeAreaView style={styles.formLogin}>
-              <TextInput
-                style={styles.input}
-                label="Email"
-                autoCapitalize="none"
-                autoCompleteType="email"
-                textContentType="emailAddress"
-                keyboardType="email-address"
-                placeholder="Correo Institucional"
-                value={email}
-                onChangeText={(text) => setEmail(text)}
-              />
-              <TextInput
-                style={styles.input}
-                label="Password"
-                returnKeyType="done"
-                secureTextEntry
-                placeholder="Contraseña"
-                value={password}
-                onChangeText={(text) => setPassword(text)}
-              />
-              <TouchableOpacity
-                Styles={styles.containerL}
-                onPress={onLoginPressed}
-              >
-                <LinearGradient
-                  colors={["#FFCC00", "#685B96", "#7A4780"]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.buttonL}
-                >
-                  <Text style={styles.textL}>Ingresar</Text>
-                </LinearGradient>
-              </TouchableOpacity>
 
-              <TouchableOpacity
-                Styles={styles.containerR}
-                onPress={() => {
-                  navigation.navigate("Register");
-                }}
-              >
-                <LinearGradient
-                  colors={["#FFCC00", "#685B96", "#7A4780"]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.buttonR}
-                >
-                  <Text style={styles.textL}>Registrar</Text>
-                </LinearGradient>
-              </TouchableOpacity>
 
-              <TouchableOpacity
-                Styles={styles.containerH}
-                onPress={() => {
-                  navigation.navigate("Recuperarcontrasena");
-                }}
-              >
-                <LinearGradient
-                  // Button Linear Gradient
-                  colors={["#FFCC00", "#685B96", "#7A4780"]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.buttonh}
-                >
-                  <Text style={styles.textL}>¿haz olvidado tú contrasena?</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-            </SafeAreaView>
-          </View>
+        <View style={styles.containerImg}>
+          <Image
+            style={styles.img}
+            source={require("../../assets/ITSZ/LOGO.png")}
+          ></Image>
         </View>
-      
+
+        <Text style={styles.titulo}>BIENVENIDO.</Text>
+        <Text styles={styles.subTitle}>
+          Al repositorio del Instituto Tecnologico Superior de Zongolica.
+        </Text>
+
+        <SafeAreaView style={styles.formLogin}>
+          <TextInput
+            style={styles.input}
+            label="Email"
+            autoCapitalize="none"
+            autoCompleteType="email"
+            textContentType="emailAddress"
+            keyboardType="email-address"
+            placeholder="Correo Institucional"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+          />
+          <TextInput
+            style={styles.input}
+            label="Password"
+            returnKeyType="done"
+            secureTextEntry
+            placeholder="Contraseña"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+          />
+
+        </SafeAreaView>
+
+        <TouchableOpacity
+          Styles={styles.containerL}
+          onPress={onLoginPressed}
+        >
+          <LinearGradient
+            colors={["#FFCC00", "#685B96", "#7A4780"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.buttonL}
+          >
+            <Text style={styles.textL}>Ingresar</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          Styles={styles.containerR}
+          onPress={() => {
+            navigation.navigate("Register");
+          }}
+        >
+          <LinearGradient
+            colors={["#FFCC00", "#685B96", "#7A4780"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.buttonR}
+          >
+            <Text style={styles.textL}>Registrar</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        <Text Styles={styles.containerH}
+          onPress={() => {
+            navigation.navigate("Recuperarcontrasena");
+          }}
+        >
+          <Text style={styles.texth}>¿Haz olvidado tú contraseña?</Text>
+
+        </Text>
+
+
+      </View>
+
     </>
   );
 }
@@ -164,13 +159,14 @@ const styles = StyleSheet.create({
   titulo: {
     color: "#000",
     fontSize: 60,
-    marginTop: 50,
+    marginTop: -30,
     fontWeight: "bold",
   },
   subTitle: {
     color: "#fff",
     fontSize: 40,
     marginTop: 20,
+    marginBottom:40,
     fontWeight: "bold",
     color: "gray",
   },
@@ -208,7 +204,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 70,
     marginBottom: 50,
-    marginTop: 85,
+    marginTop: 10,
     alignContent: "center",
   },
   containerImg: {
@@ -234,7 +230,7 @@ const styles = StyleSheet.create({
   containerL: {
     flex: 1,
     alignItems: "center",
-    width: 200,
+    width: 500,
   },
   containerR: {
     flex: 1,
@@ -242,12 +238,16 @@ const styles = StyleSheet.create({
     width: 200,
   },
   containerH: {},
+  marginLeft: 20,
+  marginRight: 60,
+  marginTop: 20,
+  marginBottom: 30,
 
   buttonL: {
     margin: 100,
     borderWidth: 1,
     borderColor: "#fff",
-    width: "47%",
+    width: 200,
     height: 50,
     borderRadius: 30,
     padding: 10,
@@ -259,12 +259,13 @@ const styles = StyleSheet.create({
     margin: 100,
     borderWidth: 1,
     borderColor: "#fff",
-    width: "47%",
+    width: 200,
     height: 50,
     borderRadius: 30,
     padding: 10,
     alignItems: "center",
     marginTop: 10,
+    marginBottom:10,
   },
   buttonh: {
     margin: 100,
@@ -275,14 +276,21 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     padding: 1,
     alignItems: "center",
-    marginTop: -85,
+    marginTop: 15,
   },
 
   textL: {
     fontSize: 15,
     color: "#fff",
     fontWeight: "bold",
-    alignItems:'center',
+    alignItems: 'center',
 
+  },
+  texth: {
+    fontSize: 15,
+    color: "#685B96",
+    fontWeight: "bold",
+    alignItems: 'center',
+    
   },
 });

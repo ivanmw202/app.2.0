@@ -15,17 +15,8 @@ import * as SecureStore from "expo-secure-store";
 import Admin from "../screens/Admin";
 const Tab = createBottomTabNavigator();
 
-export default function InsideContainer() {
-  const [is_staff, setIs_staff] = useState(false)
-  const getStaff = async () => {
-    const is_staff = await SecureStore.getItemAsync("is_staff") === 'true' ? true : false;
-    setIs_staff(is_staff);
-  }
-  useEffect(
-    () => {
-      getStaff()
-    }
-    , [])
+export default function InsideContainer({ route }) {
+  const staff = route.params.staff;
   return (
     <>
       <Tab.Navigator
@@ -180,7 +171,7 @@ export default function InsideContainer() {
           }}
         />
 
-        {is_staff === true && (
+        {staff === true && (
           <Tab.Screen
             name="Admin"
             component={Admin}

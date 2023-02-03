@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import {
   View,
   Text,
@@ -10,10 +11,13 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import RNPickerSelect from "react-native-picker-select";
 import * as SecureStore from "expo-secure-store";
 import * as DocumentPicker from "expo-document-picker";
 import { LinearGradient } from "expo-linear-gradient";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { URL_BASE } from "../config/URL_BASE";
+
 const AddFile = ({ navigation }) => {
   const staff = true;
 
@@ -21,24 +25,45 @@ const AddFile = ({ navigation }) => {
   const [fileImg, setFileImg] = useState(null);
   const [filePdf, setFilePdf] = useState(null);
   const [materia, setMateria] = useState("");
-  const [fecha_publicacion, setFechaPublicacion] = useState("");
+  const [fecha_publicacion, setFechaPublicacion] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const [tipoPublicacion, setTipoPublicacion] = useState(null);
   const [autor, setAutor] = useState("");
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setFechaPublicacion(currentDate);
+  };
 
-  const LoadPdf = async () => {
-    const file = await DocumentPicker.getDocumentAsync({ type: "application/pdf" });
-    setFilePdf({
-      uri:file.uri,
-      type:file.type,
-      name:file.name,
+  const showMode = (currentMode) => {
+    DateTimePickerAndroid.open({
+      value: date,
+      onChange,
+      mode: currentMode,
+      is24Hour: true,
     });
   };
-  const LoadImg = async() => {
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
+
+  const LoadPdf = async () => {
+    const file = await DocumentPicker.getDocumentAsync({
+      type: "application/pdf",
+    });
+    setFilePdf({
+      uri: file.uri,
+      type: file.type,
+      name: file.name,
+    });
+  };
+  const LoadImg = async () => {
     const file = await DocumentPicker.getDocumentAsync({ type: "image/*" });
     setFileImg({
-      uri:file.uri,
-      type:file.mimeType,
-      name:file.name,
+      uri: file.uri,
+      type: file.mimeType,
+      name: file.name,
     });
   };
 
@@ -52,7 +77,7 @@ const AddFile = ({ navigation }) => {
   data.append("pdf", filePdf);
 
   const handleSubmit = async () => {
-  /*  alert(JSON.stringify(fileImg)) */
+    /*  alert(JSON.stringify(fileImg)) */
     const token = await SecureStore.getItemAsync("token");
     const url = `${URL_BASE}/gestion/book/create/`;
     const request = await fetch(url, {
@@ -89,6 +114,11 @@ const AddFile = ({ navigation }) => {
               source={require("../../assets/iconos/archivo.png")}
             ></Image>
           </View>
+          <View>
+            <Button onPress={showDatepicker} title="Fecha de publicacion" />
+            <Text>Fecha: {fecha_publicacion.toLocaleString()}</Text>
+          </View>
+
           <SafeAreaView>
             <TextInput
               placeholder="Titulo"
@@ -104,17 +134,17 @@ const AddFile = ({ navigation }) => {
               }}
             />
             <TextInput
-               placeholder="materia"
-               style={styles.input}
-               label="materia"
-               autoCapitalize="none"
-               autoCompleteType=""
-               textContentType=""
-               keyboardType=""
-               value={materia}
-               onChangeText={(text) => {
-                 setMateria(text);
-               }}
+              placeholder="materia"
+              style={styles.input}
+              label="materia"
+              autoCapitalize="none"
+              autoCompleteType=""
+              textContentType=""
+              keyboardType=""
+              value={materia}
+              onChangeText={(text) => {
+                setMateria(text);
+              }}
             />
             <TextInput
               placeholder="fecha de publicacion"
@@ -147,7 +177,15 @@ const AddFile = ({ navigation }) => {
               textContentType="emailAddress"
               keyboardType="email-address"
             />
-           
+            <RNPickerSelect
+              onValueChange={(value) => setTipoPublicacion(value)}
+              items={listaDeTiposPublicacion.map((item) => {
+                return {
+                  label: item.nombre,
+                  value: item.id,
+                };
+              })}
+            />
 
             <TouchableOpacity Styles={styles.containerR} onPress={LoadPdf}>
               <LinearGradient
@@ -160,7 +198,7 @@ const AddFile = ({ navigation }) => {
                 <Text style={styles.textR}>Cargar archivo pdf</Text>
               </LinearGradient>
             </TouchableOpacity>
-            
+
             <TouchableOpacity Styles={styles.containerR} onPress={LoadImg}>
               <LinearGradient
                 // Button Linear Gradient

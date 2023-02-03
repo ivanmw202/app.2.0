@@ -6,6 +6,7 @@ import {
   StatusBar,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Searchbar } from "react-native-paper";
@@ -67,8 +68,15 @@ export default function Search({ navigation }) {
         </SafeAreaView>
 
         {cargado ? (
-          results.length === 0 ? (
-            <Text>sin resultados</Text>
+          results.length === 0 ? (<>
+            <Text style={styles.SinR}>"Sin resultados"</Text>
+            <View style={styles.containerImg}>
+          <Image
+            style={styles.img}
+            source={require("../../assets/iconos/sinr.png")}
+          ></Image>
+        </View>
+            </>
           ) : (
             <>
               {results.map((element) => (
@@ -112,8 +120,16 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     alignContent: "center",
   },
+  SinR:{
+    fontSize: 20,
+    color: "#685B96",
+    fontWeight: "bold",
+    marginRight:30,
+    marginLeft:130,
+  },
   buscador: {
     padding: 15,
+    
   },
   container1: {
     flex: 1,
@@ -134,5 +150,21 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#fff",
     fontWeight: "bold",
+  },
+  containerImg: {
+    width: 50,
+    height: 100,
+    alignContent: "center",
+  },
+  img: {
+    width: 85,
+    height: 85,
+    borderWidth: 2,
+    resizeMode: "contain",
+    marginLeft: 140,
+    marginRight: 70,
+    marginBottom: 50,
+    marginTop: 10,
+    alignContent: "center",
   },
 });

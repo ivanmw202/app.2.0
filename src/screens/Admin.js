@@ -16,7 +16,7 @@ const Admin = ({navigation}) => {
               source={require("../../assets/ITSZ/LargoB.jpg")}
             ></Image>
           </View>
-          <View>
+          <View style={styles.containersub}>
             <Text style={styles.titulo}>SITIO DE AMINISTRADOR.</Text>
           </View>
           <TouchableOpacity
@@ -68,6 +68,9 @@ const styles = StyleSheet.create({
     marginRight:20,
     marginLeft:30,
   },
+  containersub:{
+    marginBottom:60,
+  },
   img: {
     width: 350,
     height: 350,
@@ -104,5 +107,9 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
     marginTop: 10,
+  },
+  textL: {
+    fontSize: 15,
+    color: "#fff",
   },
 });
