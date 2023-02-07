@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   View,
@@ -21,23 +21,63 @@ import { URL_BASE } from "../config/URL_BASE";
 const AddFile = ({ navigation }) => {
   const staff = true;
 
+
+
+
+  const [listaDeTiposPublicacion, setListaDeTiposPublicacion] = useState([]);
+  const [listaDeAutores, setListaDeAutores] = useState([]);
+  const getListaDeTiposDePublicacion = async () => {
+    const url = `${URL_BASE}/gestion/lista/tiposdepublicacion/`;
+    const request = await fetch(url, {
+      method: "GET",
+      headers: {
+        ContentType: "application/json",
+      },
+    });
+    const response = await request.json();
+    setListaDeTiposPublicacion(response);
+    setLoading({
+      list_autor: false,
+      list_tiposdepublicacion: true,
+    });
+  };
+  const getListaDeAutores = async () => {
+    const url = `${URL_BASE}/gestion/lista/autores/`;
+    const request = await fetch(url, {
+      method: "GET",
+      headers: {
+        ContentType: "application/json",
+      },
+    });
+    const response = await request.json();
+    setListaDeAutores(response);
+    setLoading({
+      list_autor: true,
+      list_tiposdepublicacion: true,
+    });
+  };
   const [titulo, setTitulo] = useState("");
   const [fileImg, setFileImg] = useState(null);
   const [filePdf, setFilePdf] = useState(null);
   const [materia, setMateria] = useState("");
   const [fecha_publicacion, setFechaPublicacion] = useState(
-    new Date().toISOString().split("T")[0]
+    new Date()//.toISOString()//.split("T")[0]
   );
+  const [resumen, setResumen] = useState("");
+
   const [tipoPublicacion, setTipoPublicacion] = useState(null);
   const [autor, setAutor] = useState("");
+
+
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
-    setFechaPublicacion(currentDate);
+    setFechaPublicacion(currentDate.toISOString().split("T")[0]);
   };
 
   const showMode = (currentMode) => {
     DateTimePickerAndroid.open({
-      value: date,
+      value: fecha_publicacion,
       onChange,
       mode: currentMode,
       is24Hour: true,
@@ -67,30 +107,37 @@ const AddFile = ({ navigation }) => {
     });
   };
 
-  const data = new FormData();
-  data.append("titulo", titulo);
-  data.append("imagen", fileImg);
-  data.append("materia", materia);
-  data.append("fecha_publicacion", fecha_publicacion);
-  data.append("tipo_de_publicacion", tipoPublicacion);
-  data.append("autor", autor);
-  data.append("pdf", filePdf);
-
   const handleSubmit = async () => {
-    /*  alert(JSON.stringify(fileImg)) */
     const token = await SecureStore.getItemAsync("token");
     const url = `${URL_BASE}/gestion/book/create/`;
-    const request = await fetch(url, {
-      method: "POST",
-      body: data,
-      headers: {
-        "Content-Type": "multipart/form-data; ",
-        Authorization: `Token ${token}`,
-      },
-    });
-    const response = await request.json();
-    console.log(response);
+    if (fileImg !== null && filePdf !== null) {
+      let myFormData = new FormData();
+      /* myFormData.append("titulo", titulo);
+      myFormData.append("resumen", resumen);
+      myFormData.append("imagen", fileImg);
+      myFormData.append("materia", materia);
+      myFormData.append("fecha_publicacion", fecha_publicacion); //fecha pricvinoanldefault
+      myFormData.append("tipo_de_publicacion", tipoPublicacion); //tipo de puclicacion porvicional deflaut
+      myFormData.append("autor", autor); //tipo default provicinal
+      myFormData.append("pdf", filePdf); */
+      const request = await fetch(url, {
+        method: "POST",
+        body: myFormData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          'Authorization': `Token ${token}`
+        },
+      });
+      const response = await request.json();
+      console.log(response);
+      alert(JSON.stringify(response));
+    }
   };
+
+  useEffect(() => {
+    getListaDeAutores();
+    getListaDeTiposDePublicacion();
+  }, []);
   return (
     <>
       {/*  <View>
@@ -114,10 +161,7 @@ const AddFile = ({ navigation }) => {
               source={require("../../assets/iconos/archivo.png")}
             ></Image>
           </View>
-          <View>
-            <Button onPress={showDatepicker} title="Fecha de publicacion" />
-            <Text>Fecha: {fecha_publicacion.toLocaleString()}</Text>
-          </View>
+
 
           <SafeAreaView>
             <TextInput
@@ -147,41 +191,63 @@ const AddFile = ({ navigation }) => {
               }}
             />
             <TextInput
-              placeholder="fecha de publicacion"
+              multiline={true}
+              numberOfLines={4}
+              placeholder="Resumen"
               style={styles.input}
-              label="fecha publicacion"
+              label="Resumen"
               autoCapitalize="none"
               autoCompleteType=""
-              textContentType="date"
-              keyboardType="date"
-            />
-            <TextInput
-              placeholder="tipo de publicacion"
-              style={styles.input}
-              label="tipo de publicacion"
-              autoCapitalize="none"
-              autoCompleteType=""
-              textContentType="number"
-              keyboardType="number"
-              value={tipoPublicacion}
+              textContentType=""
+              keyboardType=""
+              value={resumen}
               onChangeText={(text) => {
-                setTipoPublicacion(text);
+                setResumen(text);
               }}
             />
-            <TextInput
-              placeholder="Autor"
-              style={styles.input}
-              label="Email"
-              autoCapitalize="none"
-              autoCompleteType="email"
-              textContentType="emailAddress"
-              keyboardType="email-address"
-            />
+            <TouchableOpacity
+              Styles={styles.containerIN} onPress={showDatepicker}
+
+            >
+              <LinearGradient
+                // Button Linear Gradient
+                colors={["#FFCC00", "#685B96", "#7A4780"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.buttonIN}
+              >
+                <Text style={styles.textIN}>Selecccionar fecha</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+
+
+            <Text>Fecha: {fecha_publicacion.toLocaleString()}</Text>
+
+
             <RNPickerSelect
               onValueChange={(value) => setTipoPublicacion(value)}
+              placeholder={{
+                label: 'Selecciona un tipo de publicacion...',
+                value: null,
+              }}
               items={listaDeTiposPublicacion.map((item) => {
                 return {
                   label: item.nombre,
+                  value: item.id,
+                };
+              })}
+            />
+
+            <RNPickerSelect
+              placeholder={{
+                label: 'Selecciona un autor...',
+                value: null,
+              }}
+              onValueChange={(value) => setAutor(value)}
+              items={listaDeAutores.map((item) => {
+                return {
+                  label: (`${item.nombres} ${item.apellido_paterno} ${item.apellido_materno}`),
                   value: item.id,
                 };
               })}
@@ -213,7 +279,9 @@ const AddFile = ({ navigation }) => {
 
             <TouchableOpacity
               Styles={styles.containerIN}
-              onPress={handleSubmit}
+              onPress={() => {
+                handleSubmit()
+              }}
             >
               <LinearGradient
                 // Button Linear Gradient
