@@ -74,7 +74,7 @@ export default function LoginScreen({ navigation }) {
           ></Image>
         </View>
 
-        <Text style={styles.titulo}>BIENVENIDO.</Text>
+        <Text style={styles.titulo}>BIENVENIDO</Text>
         <Text styles={styles.subTitle}>
           Al repositorio del Instituto Tecnologico Superior de Zongolica.
         </Text>

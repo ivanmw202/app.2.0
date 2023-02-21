@@ -45,7 +45,7 @@ const AddAutor = () => {
           </View>
           <SafeAreaView>
             <TextInput
-              placeholder="Nombres"
+              placeholder="Nombre(s)"
               style={styles.input}
               label="first_name"
               autoCapitalize="none"

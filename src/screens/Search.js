@@ -43,7 +43,7 @@ export default function Search({ navigation }) {
       }
       setData({
         cargado: true,
-        results: [...results,...response.results],
+        results: [response.results,...results],
         info: response.info,
       });
     }
@@ -65,6 +65,7 @@ export default function Search({ navigation }) {
               onIconPress={()=>onPrees()}
             />
           </View>
+          <Button></Button>
         </SafeAreaView>
 
         {cargado ? (
