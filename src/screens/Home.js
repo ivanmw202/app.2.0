@@ -23,6 +23,7 @@ export default function Home({ navigation }) {
   const [infoprofile, setInfoprofile] = useState({});
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [pages, setPages] = useState(null);
 
   const getLibros = async () => {
     let token = await SecureStore.getItemAsync("token");
@@ -36,11 +37,12 @@ export default function Home({ navigation }) {
     });
 
     const respuesta = await solicitud.json();
-    if (page < respuesta.info.pages) {
-      setPage(page + 1);
-    }
+    setPages(respuesta.info.pages);
+
+    setPage(page + 1);
+
     setLoading(false);
-    setData([...data, ...respuesta.results]);
+    setData((data) => [...data, ...respuesta.results]);
   };
   const getInfo = async () => {
     let token = await SecureStore.getItemAsync("token");
@@ -57,7 +59,10 @@ export default function Home({ navigation }) {
     console.log(JSON.stringify(respuesta.last_name));
     await SecureStore.setItemAsync("nombre", respuesta.first_name);
     await SecureStore.setItemAsync("apellido_paterno", respuesta.last_name);
-    await SecureStore.setItemAsync("apellido_materno", respuesta.apellido_materno);
+    await SecureStore.setItemAsync(
+      "apellido_materno",
+      respuesta.apellido_materno
+    );
     await SecureStore.setItemAsync("matricula", respuesta.matricula);
   };
   useEffect(() => {
@@ -69,7 +74,9 @@ export default function Home({ navigation }) {
   return (
     <>
       <ScrollView>
-      <View style={{ backgroundColor: "#FFCC00", flex: 1, padding: 18 }}></View>
+        <View
+          style={{ backgroundColor: "#FFCC00", flex: 1, padding: 18 }}
+        ></View>
         <View style={styles.contenedorP}>
           <View style={styles.containerIm}>
             <Image
@@ -94,7 +101,11 @@ export default function Home({ navigation }) {
           <TouchableOpacity
             Styles={styles.container1}
             onPress={() => {
-              getLibros();
+              if (page - 1 === pages) {
+                alert("No hay mas resultados");
+              } else {
+                getLibros();
+              }
             }}
           >
             <LinearGradient
@@ -153,10 +164,9 @@ const styles = StyleSheet.create({
     marginLeft: 60,
     marginRight: 90,
     alignContent: "center",
-    marginTop:15,
+    marginTop: 15,
   },
-  contenedorP:{
-    backgroundColor:'#fff',
-    
-},
+  contenedorP: {
+    backgroundColor: "#fff",
+  },
 });
