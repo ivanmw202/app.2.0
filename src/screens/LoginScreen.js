@@ -16,8 +16,9 @@ import { StatusBar } from "expo-status-bar";
 import * as SecureStore from "expo-secure-store";
 import { useState } from "react";
 import { URL_BASE } from "../config/URL_BASE";
-
-export default function LoginScreen({ navigation }) {
+import { useNavigation } from '@react-navigation/native';
+export default function LoginScreen() {
+  const navigation= useNavigation();
   const [staff, setStaff] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -50,7 +51,7 @@ export default function LoginScreen({ navigation }) {
     if (respuesta.email === email && respuesta.token) {
       await SecureStore.setItemAsync("token", respuesta.token);
       await SecureStore.setItemAsync("email", respuesta.email);
-      respuesta.is_staff === true && setStaff(true)
+      respuesta.is_staff === true && navigation.navigate("Inside", { staff: true });
       navigation.navigate("Inside", { staff: staff });
     } else {
       alert(respuesta.email);

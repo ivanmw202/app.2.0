@@ -21,8 +21,8 @@ export default function Search({ navigation }) {
   const [data, setData] = useState({
     cargado: false,
     results: [],
-    info: {},
   });
+  const [pages, setPages] = useState(null);
   const onChangeSearch = (query) => setConsulta(query);
   const onPrees = async () => {
     const url = `${URL_BASE}/archivo/?page=${page}&search=${consulta}`;
@@ -38,13 +38,12 @@ export default function Search({ navigation }) {
         },
       });
       const response = await request.json();
-      if (page < response.info.pages) {
-        setPage(page + 1);
-      }
+      setPages(response.info.pages);
+      setPage(page + 1);
+
       setData({
         cargado: true,
-        results: [response.results,...results],
-        info: response.info,
+        results: [...results, ...response.results],
       });
     }
   };
@@ -52,9 +51,9 @@ export default function Search({ navigation }) {
   return (
     <>
       <ScrollView>
-        <View style={{ backgroundColor: "#FFCC00", flex: 1, padding: 18 }}>
-      
-        </View>
+        <View
+          style={{ backgroundColor: "#FFCC00", flex: 1, padding: 18 }}
+        ></View>
 
         <SafeAreaView style={{ flex: 1, marginTop: StatusBar.currenHeight }}>
           <View style={styles.buscador}>
@@ -62,21 +61,28 @@ export default function Search({ navigation }) {
               placeholder="Buscar"
               onChangeText={onChangeSearch}
               value={consulta}
-              onIconPress={()=>onPrees()}
+              onIconPress={() => {
+                setData({
+                  cargado:false,
+                  results: [],
+                });
+                setPage(1);
+                onPrees();
+              }}
             />
           </View>
-          <Button></Button>
         </SafeAreaView>
 
         {cargado ? (
-          results.length === 0 ? (<>
-            <Text style={styles.SinR}>"Sin resultados"</Text>
-            <View style={styles.containerImg}>
-          <Image
-            style={styles.img}
-            source={require("../../assets/iconos/sinr.png")}
-          ></Image>
-        </View>
+          results.length === 0 ? (
+            <>
+              <Text style={styles.SinR}>Sin resultados</Text>
+              <View style={styles.containerImg}>
+                <Image
+                  style={styles.img}
+                  source={require("../../assets/iconos/sinr.png")}
+                ></Image>
+              </View>
             </>
           ) : (
             <>
@@ -93,7 +99,16 @@ export default function Search({ navigation }) {
                 </View>
               ))}
               <View>
-                <TouchableOpacity Styles={styles.container1} onPress={onPrees}>
+                <TouchableOpacity
+                  Styles={styles.container1}
+                  onPress={() => {
+                    if (page - 1 === pages) {
+                      alert("No hay mas resultados");
+                    } else {
+                      onPrees();
+                    }
+                  }}
+                >
                   <LinearGradient
                     colors={["#FFCC00", "#FFCC00", "#FFCC00"]}
                     start={{ x: 0, y: 0 }}
@@ -101,6 +116,25 @@ export default function Search({ navigation }) {
                     style={styles.button}
                   >
                     <Text style={styles.textL}>ver mas resultados</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  Styles={styles.container1}
+                  onPress={() => {
+                    setData({
+                      cargado: false,
+                      results: [],
+                    });
+                    setPage(1);
+                  }}
+                >
+                  <LinearGradient
+                    colors={["#FFCC00", "#FFCC00", "#FFCC00"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.button}
+                  >
+                    <Text style={styles.textL}>Limpiar</Text>
                   </LinearGradient>
                 </TouchableOpacity>
               </View>
@@ -121,16 +155,15 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     alignContent: "center",
   },
-  SinR:{
+  SinR: {
     fontSize: 20,
     color: "#685B96",
     fontWeight: "bold",
-    marginRight:30,
-    marginLeft:130,
+    marginRight: 30,
+    marginLeft: 130,
   },
   buscador: {
     padding: 15,
-    
   },
   container1: {
     flex: 1,

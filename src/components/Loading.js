@@ -6,7 +6,7 @@ const Loading = () => {
       <View>
         <Image
           style={styles.img}
-          source={require('../../assets/iconos/Loading.gif')}
+          source={require('../../assets/iconos/Loading1.gif')}
         />
       </View>
     </>
@@ -17,14 +17,12 @@ export default Loading;
 
 const styles = StyleSheet.create({
   img: {
-    width: 270,
-    height: 270,
-    borderWidth: 2,
-    resizeMode: 'contain',
-    marginLeft: 20,
+    width: 220,
+    height: 220,
+    borderWidth: 1,
+    marginLeft: 80,
     marginRight: 70,
-    marginBottom: 50,
-    marginTop: 85,
+    marginTop: 290,
     alignContent: 'center',
   },
 });

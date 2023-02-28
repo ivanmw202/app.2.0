@@ -14,8 +14,8 @@ export default function BookCard({ navigation, imagen, titulo, materia, id }) {
       <View>
         <View>
           <Image style={styles.imagen} source={{ uri: imagen }} />
-          <Text>{titulo}</Text>
-          <Text>{materia}</Text>
+          <Text style={styles.titulo}>{titulo}</Text>
+          <Text style={styles.titulo}>{materia}</Text>
         
 
           <TouchableOpacity
@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     marginLeft: 90,
   },
   container: {
+    
     borderWidth: 1,
     width: '165%',
     borderRadius: 15,
@@ -73,5 +74,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#fff',
     fontWeight: 'bold',
+  },
+  titulo: {
+    color: "#000",
+    fontSize: 15,
+    marginTop: 1,
+    fontWeight: "bold",
   },
 });

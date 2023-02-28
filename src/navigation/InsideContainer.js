@@ -14,9 +14,19 @@ import URL_BASE from "../config/URL_BASE";
 import * as SecureStore from "expo-secure-store";
 import Admin from "../screens/Admin";
 const Tab = createBottomTabNavigator();
+import { useRoute } from '@react-navigation/native';
 
-export default function InsideContainer({ route }) {
-  const staff = route.params.staff;
+
+export default function InsideContainer() {
+  const route = useRoute();
+  const [staff, setStaff] = useState(null);
+
+  useEffect(() => {
+    if (route.params?.staff) {
+      setStaff(route.params.staff);
+    }
+  }, [route.params]);
+  
   return (
     <>
       <Tab.Navigator
@@ -28,7 +38,7 @@ export default function InsideContainer({ route }) {
           left: 20,
           right: 20,
           elevation: 0,
-          backgroundColor: "#ffffff",
+          backgroundColor: "#fff",
           borderRadius: 15,
           height: 90,
           ...styles.shadow,

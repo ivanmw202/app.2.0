@@ -45,7 +45,13 @@ export default function BookDetail({ route }) {
       {loading ? (
         <Loading />
       ) : (
-   
+        <>
+          <View style={styles.containerIm}>
+            <Image
+              style={styles.img}
+              source={require("../../assets/ITSZ/LargoB.jpg")}
+            ></Image>
+          </View>
           <View style={styles.container}>
             <Text style={styles.titulo}>TITULO: {data.titulo} </Text>
             <Text>Resumen: {data.resumen} </Text>
@@ -54,7 +60,8 @@ export default function BookDetail({ route }) {
             <Image style={styles.imagen} source={{ uri: data.imagen }} />
             <OpenURLButton url={data.pdf}></OpenURLButton>
           </View>
-     
+        </>
+
       )}
     </>
   );
@@ -93,20 +100,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 15,
     borderRadius: 15,
-    borderWidth: 1,
+    borderWidth: 5,
     width: "90%",
     marginLeft: 20,
     padding: 10,
     height: 2,
     marginBottom: 60,
+    backgroundColor: "#AEB16F",
   },
   imagen: {
     width: 150,
     height: 150,
+    borderWidth: 1,
+    borderColor: "#882BDE",
+    margin: 30,
+    borderRadius: 10,
   },
   titulo: {
     color: "#000",
-    fontSize: 50,
+    fontSize: 40,
     marginTop: 50,
     fontWeight: "bold",
   },
@@ -143,5 +155,20 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#fff",
     fontWeight: "bold",
+  },
+  containerIm: {
+    marginHorizontal: 50,
+    length: 20,
+    right: 80,
+  },
+  img: {
+    width: 300,
+    height: 90,
+    borderWidth: 1,
+    resizeMode: "contain",
+    marginLeft: 60,
+    marginRight: 90,
+    alignContent: "center",
+    marginTop: 15,
   },
 });

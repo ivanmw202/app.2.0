@@ -73,7 +73,8 @@ export default function Home({ navigation }) {
 
   return (
     <>
-      <ScrollView>
+      <ScrollView style={styles.pnt}>
+      <View style={styles.screen}>
         <View
           style={{ backgroundColor: "#FFCC00", flex: 1, padding: 18 }}
         ></View>
@@ -118,6 +119,7 @@ export default function Home({ navigation }) {
             </LinearGradient>
           </TouchableOpacity>
         </View>
+        </View>
       </ScrollView>
       {loading ? <Loading /> : null}
     </>
@@ -125,6 +127,15 @@ export default function Home({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  pnt:{
+    flex:1,
+    backgroundColor:"#FFF",
+  },
+  screen: {
+    flex: 1,
+    backgroundColor: "#FFF",
+  },
+
   bookCardContainer: {
     width: 200,
     height: 200,
@@ -167,6 +178,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   contenedorP: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF",
   },
 });
