@@ -1,9 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/LoginScreen";
-import Home from "../screens/Home";
 import RegisterScreen from "../screens/RegisterScreen";
 import BookDetail from "../screens/BookDetail";
 import InsideContainer from "./InsideContainer";

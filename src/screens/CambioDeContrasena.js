@@ -80,15 +80,17 @@ export default function CambioDeContrasena({ navigation, route }) {
               value={password1}
               placeholder="ingrese su nueva contraseña"
               onChangeText={(text) => setPassword1(text)}
+              secureTextEntry={!showPassword}
             ></TextInput>
             <TextInput
               value={password2}
               style={styles.input1}
+              secureTextEntry={!showPassword2}
               placeholder="confrime su contraseña"
               onChangeText={(text) => setPassword2(text)}
             ></TextInput>
             <TouchableWithoutFeedback onPress={toggleShowPassword}>
-              <View style={{ position: "absolute", right: 25, top: 70 }}>
+              <View style={{ position: "absolute", right: 33, top: 70 }}>
                 <Image
                   style={styles.ojo}
                   source={require("../../assets/iconos/contraseña.png")}
@@ -158,15 +160,15 @@ const styles = StyleSheet.create({
   datos: {
     marginRight: 80,
     borderWidth: 1,
-    width: "85%",
+    width: "92%",
     borderRadius: 15,
     padding: 10,
-    paddingStart: 0,
-    marginLeft: 15,
-    marginRight: 15,
-    height: 280,
-    right: 20,
-    left: 15,
+    paddingStart: "5%",
+    marginLeft: "1%",
+    marginRight: "1%",
+    height: "60%",
+    right: "3%",
+    left: "3%",
   },
  
   input: {
@@ -178,11 +180,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingStart: 50,
     padding: 1,
-    width: 270,
+    width: "90%",
     height: 50,
     padding: 10,
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 30,
     marginTop: 50,
   },
   input1: {
@@ -194,11 +196,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingStart: 50,
     padding: 1,
-    width: 270,
+    width: "90%",
     height: 50,
     padding: 10,
     alignItems: "center",
-    marginBottom: 1,
+    marginBottom: 15,
     marginTop: 0,
   },
   containerIm: {
@@ -212,8 +214,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 1,
     fontWeight: "bold",
-    marginLeft: 20,
-    marginBottom:"10%"
+    marginLeft: "5%",
+    marginBottom:"25%"
   },
   img: {
     marginBottom: 100,
@@ -226,6 +228,6 @@ const styles = StyleSheet.create({
    
   },
   contenedorP: {
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
 });

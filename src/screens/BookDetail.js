@@ -38,7 +38,7 @@ export default function BookDetail({ route }) {
     //use efect para que cuando se carge el componentete se ejecute la funcion posFata
     getLibro();
   }, []);
-  //holaaaaa
+  //
 
   return (
     <>
@@ -46,6 +46,9 @@ export default function BookDetail({ route }) {
         <Loading />
       ) : (
         <>
+        <View
+            style={{ backgroundColor: "#FFCC00",  padding: 18, width: 400, }}
+          ></View>
           <View style={styles.containerIm}>
             <Image
               style={styles.img}
@@ -106,7 +109,7 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 2,
     marginBottom: 60,
-    backgroundColor: "#AEB16F",
+    backgroundColor: "#CFFCF6",
   },
   imagen: {
     width: 150,
