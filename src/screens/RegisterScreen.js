@@ -9,6 +9,7 @@ import {
   ScrollView,
   SafeAreaView,
   Image,
+  TouchableWithoutFeedback
 } from 'react-native';
 import { useState } from 'react';
 import { URL_BASE } from '../config/URL_BASE';
@@ -20,6 +21,17 @@ export default function LoginScreen({navigation}) {
   const [matricula, setMatricula] = useState('');
   const [apellido_materno, setApellido_materno] = useState('');
   const [status, setStatus] = useState('failed');
+
+
+  //show password
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const toggleShowPassword2 = () => {
+    setShowPassword2(!showPassword2);
+  };
 
   const cleanInputs = () => {
     setEmail('');
@@ -125,15 +137,46 @@ export default function LoginScreen({navigation}) {
           value={email}
           onChangeText={(text) => setEmail(text)}
         />
+        <Text>Ingrese una contraseña mayor a ocho 
+        caracteres utilizando letras, numeros y simbolos </Text>
+
+
+        {/**Contrase */}
         <TextInput
           placeholder="Contraseña"
           style={styles.input}
           label="Password"
           returnKeyType="done"
-          secureTextEntry
+          secureTextEntry={!showPassword}
           value={password}
           onChangeText={(text) => setPassword(text)}
         />
+        
+        <TextInput
+          placeholder="Confirmar contraseña"
+          style={styles.input}
+          label="Password"
+          returnKeyType="done"
+          secureTextEntry={!showPassword2}
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+        />
+        <TouchableWithoutFeedback onPress={toggleShowPassword}>
+            <View style={{ position: "absolute", right: 33, top: 385 }}>
+              <Image
+                style={styles.ojo}
+                source={require("../../assets/iconos/contraseña.png")}
+              ></Image>
+            </View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={toggleShowPassword2}>
+            <View style={{ position: "absolute", right: 33, top: 450 }}>
+              <Image
+                style={styles.ojo}
+                source={require("../../assets/iconos/contraseña.png")}
+              ></Image>
+            </View>
+          </TouchableWithoutFeedback>
 
         <TouchableOpacity Styles={styles.containerR} onPress={onSignupPressed}>
           <LinearGradient
@@ -167,13 +210,17 @@ export default function LoginScreen({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  ojo: {
+    width: 30,
+    height: 30,
+  },
   input: {
     height: 50,
     margin: 12,
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 30,
-    backgroundColor: '#fff',
+    backgroundColor: '#F1F1F1',
     paddingStart: 30,
     padding: 10,
     width: 350,
@@ -187,7 +234,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#f1f1f1',
+    backgroundColor: '#FFF',
     alignItems: 'center',
     justifyContent: 'center',
   },

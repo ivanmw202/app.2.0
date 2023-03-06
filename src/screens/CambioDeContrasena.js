@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { URL_BASE } from "../config/URL_BASE";
 import { useState } from "react";
@@ -16,12 +17,22 @@ export default function CambioDeContrasena({ navigation, route }) {
   const code = route.params.code;
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
+
+  //show password
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const toggleShowPassword2 = () => {
+    setShowPassword2(!showPassword2);
+  };
+
   const handleClickChange = async () => {
     const url = `${URL_BASE}/auth/password/reset/verified/`;
     console.log(url);
     if (password1.trim() !== "" && password2.trim() !== "") {
       if (password1 === password1) {
-        
         const data = {
           code: code,
           password: password1,
@@ -49,49 +60,64 @@ export default function CambioDeContrasena({ navigation, route }) {
   };
   return (
     <>
-      <ScrollView>
-        <View
-          style={{ backgroundColor: "#FFCC00", flex: 1, padding: 18 }}
-        ></View>
+      <ScrollView contentContainerStyle={styles.mainContainer}>
+        <View style={{ backgroundColor: "#FFCC00", padding: 18 }}></View>
+
+        <View style={styles.containerIm}>
+          <Image
+            style={styles.img}
+            source={require("../../assets/ITSZ/LargoB.jpg")}
+          ></Image>
+        </View>
+        <Text style={styles.titulo}>RESTABLEZCA SU NUEVA CONTARSEÑA.</Text>
+
         <View style={styles.contenedorP}>
-          <View style={styles.containerIm}>
-            <Image
-              style={styles.img}
-              source={require("../../assets/ITSZ/LargoB.jpg")}
-            ></Image>
-          </View>
+          
 
-          <View style={styles.contenedorP}>
-            <Text style={styles.titulo}>RESTABLEZCA SU NUEVA CONTARSEÑA.</Text>
-
-            <View style={styles.datos}>
-              <TextInput
-                style={styles.input}
-                value={password1}
-                placeholder="ingrese su nueva contraseña"
-                onChangeText={(text) => setPassword1(text)}
-              ></TextInput>
-              <TextInput
-                value={password2}
-                style={styles.input1}
-                placeholder="confrime su contraseña"
-                onChangeText={(text) => setPassword2(text)}
-              ></TextInput>
-              <View>
-                <TouchableOpacity
-                  Styles={styles.container1}
-                  onPress={handleClickChange}
-                >
-                  <LinearGradient
-                    colors={["#FFCC00", "#685B96", "#7A4780"]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={styles.button}
-                  >
-                    <Text style={styles.textL}>GUARDAR</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
+          <View style={styles.datos}>
+            <TextInput
+              style={styles.input}
+              value={password1}
+              placeholder="ingrese su nueva contraseña"
+              onChangeText={(text) => setPassword1(text)}
+            ></TextInput>
+            <TextInput
+              value={password2}
+              style={styles.input1}
+              placeholder="confrime su contraseña"
+              onChangeText={(text) => setPassword2(text)}
+            ></TextInput>
+            <TouchableWithoutFeedback onPress={toggleShowPassword}>
+              <View style={{ position: "absolute", right: 25, top: 70 }}>
+                <Image
+                  style={styles.ojo}
+                  source={require("../../assets/iconos/contraseña.png")}
+                ></Image>
               </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={toggleShowPassword2}>
+              <View style={{ position: "absolute", right: 33, top: 150 }}>
+                <Image
+                  style={styles.ojo}
+                  source={require("../../assets/iconos/contraseña.png")}
+                ></Image>
+              </View>
+            </TouchableWithoutFeedback>
+
+            <View>
+              <TouchableOpacity
+                Styles={styles.container1}
+                onPress={handleClickChange}
+              >
+                <LinearGradient
+                  colors={["#FFCC00", "#685B96", "#7A4780"]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.button}
+                >
+                  <Text style={styles.textL}>GUARDAR</Text>
+                </LinearGradient>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -100,6 +126,14 @@ export default function CambioDeContrasena({ navigation, route }) {
   );
 }
 const styles = StyleSheet.create({
+  ojo: {
+    width: 30,
+    height: 30,
+  },
+  mainContainer: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+  },
   container1: {
     flex: 1,
     alignItems: "center",
@@ -134,7 +168,7 @@ const styles = StyleSheet.create({
     right: 20,
     left: 15,
   },
-  contenedorP: {},
+ 
   input: {
     height: 20,
     margin: 20,
@@ -171,24 +205,27 @@ const styles = StyleSheet.create({
     marginHorizontal: 50,
     length: 20,
     right: 80,
+    color:'#000',
   },
   titulo: {
     color: "#000",
     fontSize: 20,
-    marginTop: 20,
+    marginTop: 1,
     fontWeight: "bold",
-    marginLeft: 40,
+    marginLeft: 20,
+    marginBottom:"10%"
   },
   img: {
+    marginBottom: 100,
     width: 280,
-    height: 280,
+    height: 80,
     borderWidth: 1,
     resizeMode: "contain",
     marginLeft: 70,
     marginRight: 90,
-    alignContent: "center",
+   
   },
   contenedorP: {
-    backgroundColor: "#fff",
+    backgroundColor: "#000",
   },
 });

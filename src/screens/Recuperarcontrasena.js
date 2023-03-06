@@ -42,17 +42,19 @@ export default function Recuperarcontrasena({ navigation }) {
 
   return (
     <>
-      <ScrollView contentContainerStyle={styles.mainContainer}>
-        <View style={{ backgroundColor: "#FFCC00", padding: 18 }}></View>
-        <View>
-          <View style={styles.containerIm}>
-            <Image
-              style={styles.img}
-              source={require("../../assets/ITSZ/LargoB.jpg")}
-            ></Image>
-          </View>
+    {state === "loading" && <Loading></Loading>}
+      
 
           {state === "await" && (
+            <ScrollView contentContainerStyle={styles.mainContainer}>
+            <View style={{ backgroundColor: "#FFCC00", padding: 18 }}></View>
+            <View>
+              <View style={styles.containerIm}>
+                <Image
+                  style={styles.img}
+                  source={require("../../assets/ITSZ/LargoB.jpg")}
+                ></Image>
+              </View>
             <View style={styles.contenedorP}>
               <View style={styles.datos}>
                 <TextInput
@@ -79,10 +81,11 @@ export default function Recuperarcontrasena({ navigation }) {
                 </View>
               </View>
             </View>
-          )}
-          {state === "loading" && <Loading></Loading>}
+        
+          
         </View>
       </ScrollView>
+        )}
     </>
   );
 }

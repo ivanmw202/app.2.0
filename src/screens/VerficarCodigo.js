@@ -36,9 +36,11 @@ export default function VerificarCodigo({ navigation }) {
    }, []);
   return (
     <>
+    {state === "loading" && <Loading />}
+          {state === "await" && (
       <ScrollView contentContainerStyle={styles.mainContainer}>
         <View
-          style={{ backgroundColor: "#FFCC00", flex: 1, padding: 18 }}
+          style={{ backgroundColor: "#FFCC00",  padding: 18 }}
         ></View>
         <View>
           <View style={styles.containerIm}>
@@ -48,8 +50,7 @@ export default function VerificarCodigo({ navigation }) {
             ></Image>
           </View>
           
-          {state === "loading" && <Loading />}
-          {state === "await" && (
+          
             <View style={styles.contenedorP}>
               <View style={styles.datos}>
                 <TextInput
@@ -76,14 +77,16 @@ export default function VerificarCodigo({ navigation }) {
                 </View>
               </View>
             </View>
-          )}
+         
         </View>
       </ScrollView>
+       )}
     </>
   );
 }
 const styles = StyleSheet.create({
   mainContainer: {
+    flex:1,
     backgroundColor: "#ffffff",
   },
   container1: {

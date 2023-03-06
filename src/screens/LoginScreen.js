@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Image,
   ScrollView,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -16,13 +17,18 @@ import { StatusBar } from "expo-status-bar";
 import * as SecureStore from "expo-secure-store";
 import { useState } from "react";
 import { URL_BASE } from "../config/URL_BASE";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 export default function LoginScreen() {
-  const navigation= useNavigation();
+  const navigation = useNavigation();
   const [staff, setStaff] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   const emptyValidate = () => {
     if (email.trim() === "") {
       alert("el email no puede estar vacio");
@@ -36,7 +42,7 @@ export default function LoginScreen() {
     const url = `${URL_BASE}/auth/login/`;
     var data = {
       email: email,
-      password: password
+      password: password,
     };
     const response = await fetch(url, {
       method: "POST", // or 'PUT'
@@ -51,7 +57,8 @@ export default function LoginScreen() {
     if (respuesta.email === email && respuesta.token) {
       await SecureStore.setItemAsync("token", respuesta.token);
       await SecureStore.setItemAsync("email", respuesta.email);
-      respuesta.is_staff === true && navigation.navigate("Inside", { staff: true });
+      respuesta.is_staff === true &&
+        navigation.navigate("Inside", { staff: true });
       navigation.navigate("Inside", { staff: staff });
     } else {
       alert(respuesta.email);
@@ -63,11 +70,7 @@ export default function LoginScreen() {
 
   return (
     <>
-
       <View style={styles.screen}>
-
-
-
         <View style={styles.containerImg}>
           <Image
             style={styles.img}
@@ -96,18 +99,23 @@ export default function LoginScreen() {
             style={styles.input}
             label="Password"
             returnKeyType="done"
-            secureTextEntry
+            secureTextEntry={!showPassword}
             placeholder="Contraseña"
             value={password}
             onChangeText={(text) => setPassword(text)}
+            
           />
-
+          <TouchableWithoutFeedback onPress={toggleShowPassword}>
+            <View style={{ position: "absolute", right: 30, top: 137 }}>
+              <Image
+                style={styles.ojo}
+                source={require("../../assets/iconos/contraseña.png")}
+              ></Image>
+            </View>
+          </TouchableWithoutFeedback>
         </SafeAreaView>
 
-        <TouchableOpacity
-          Styles={styles.containerL}
-          onPress={onLoginPressed}
-        >
+        <TouchableOpacity Styles={styles.containerL} onPress={onLoginPressed}>
           <LinearGradient
             colors={["#FFCC00", "#685B96", "#7A4780"]}
             start={{ x: 0, y: 0 }}
@@ -134,18 +142,15 @@ export default function LoginScreen() {
           </LinearGradient>
         </TouchableOpacity>
 
-        <Text Styles={styles.containerH}
+        <Text
+          Styles={styles.containerH}
           onPress={() => {
             navigation.navigate("Recuperarcontrasena");
           }}
         >
           <Text style={styles.texth}>¿Haz olvidado tú contraseña?</Text>
-
         </Text>
-
-
       </View>
-
     </>
   );
 }
@@ -157,6 +162,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  ojo: {
+    width: 30,
+    height: 30,
+  },
   titulo: {
     color: "#000",
     fontSize: 60,
@@ -167,7 +176,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 40,
     marginTop: 20,
-    marginBottom:40,
+    marginBottom: 40,
     fontWeight: "bold",
     color: "gray",
   },
@@ -266,7 +275,7 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
     marginTop: 10,
-    marginBottom:10,
+    marginBottom: 10,
   },
   buttonh: {
     margin: 100,
@@ -284,14 +293,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#fff",
     fontWeight: "bold",
-    alignItems: 'center',
-
+    alignItems: "center",
   },
   texth: {
     fontSize: 15,
     color: "#685B96",
     fontWeight: "bold",
-    alignItems: 'center',
-    
+    alignItems: "center",
   },
 });
